@@ -1,0 +1,2 @@
+mess=0111fffffffffffffffffffffffffcaaaaaaaa
+mask=fefefefe
