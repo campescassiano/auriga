@@ -6,6 +6,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <netinet/in.h>
 
 #define MIN(a,b) (((a)<(b))?(a):(b))        ///< Definition of MIN() function
 
@@ -119,6 +120,7 @@ typedef struct message_s {
 
 /**
  * @brief Do the CRC32 for the given data
+ *        Source: https://stackoverflow.com/a/21001712/2031180
  *
  * @param src The source data to execute the CRC32
  * @param size the Size of @p src buffer
@@ -127,24 +129,20 @@ typedef struct message_s {
  */
 static uint32_t do_crc32(const char *src, size_t size)
 {
-    uint32_t crc = CRC32_INIT_VALUE;
-    int i, j;
+    unsigned int byte, crc, mask;
 
-    for (i = 0; i < size; i++)
+    crc = CRC32_INIT_VALUE;
+    for (int i = 0; i < size; i++)
     {
-        crc ^= (uint32_t)src[i];
-
-        for (j = 0; j < sizeof(uint32_t); j++)
+        byte = src[i];
+        crc = crc ^ byte;
+        for (int j = 7; j >= 0; j--)
         {
-            if (crc & 1)
-                crc = (crc >> 1) ^ CRC32_POLYNOME;
-            else
-                crc >>= 1;
+            mask = -(crc & 1);
+            crc = (crc >> 1) ^ (CRC32_POLYNOME & mask);
         }
     }
-
-    return crc ^ CRC32_INIT_VALUE;
-
+    return ~crc;
 }
 
 /**
@@ -467,10 +465,9 @@ static bool load_message(const char *filename, message_t *message)
 
     uint32_t calculated = do_crc32(message->data, message->length - CRC_SIZE);
 
-    if (memcmp(message->crc, (char*)&calculated, CRC_SIZE) != 0)
+    if (htonl(*(uint32_t*)message->crc) != calculated)
     {
-        //TODO::FIXME
-        printf("Error! Wrong CRC, %s:%d\n", __func__, __LINE__);
+        printf("Error! Wrong CRC, should be=%"PRIu32", got=%"PRIu32", %s:%d\n", calculated, htonl(*(uint32_t*)message->crc), __func__, __LINE__);
         fclose(fp);
         g_errno = ERROR_CRC;
         return false;
