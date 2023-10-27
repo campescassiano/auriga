@@ -33,8 +33,6 @@ static const int g_mask_leading_length = strlen(g_mask_leading_keyword);    ///<
 #define PAYLOAD_SIZE                UINT8_C(DATA_SIZE + CRC_SIZE)
 #define MASK_SIZE                   UINT8_C(sizeof(uint32_t))
 
-#define MESSAGE_SIZE                UINT16_C(TYPE_SIZE + LENGTH_SIZE + PAYLOAD_SIZE)
-
 #define ASCII_HEX_LENGTH            UINT8_C(sizeof(uint8_t) * 2)    ///< The length of 1-byte representation in ASCII
 
 /**
@@ -54,11 +52,6 @@ static const int g_mask_leading_length = strlen(g_mask_leading_keyword);    ///<
 #define APPEND                      (true)  ///< Append into the file
 #define NOT_APPEND                  (false) ///< Not append into the file
 
-#define ASCII_MESSAGE_MIN_SIZE      (TYPE_HEX_LENGTH + \
-                                     LENGTH_HEX_LENGTH + \
-                                     DATA_HEX_LENGTH + \
-                                     CRC32_HEX_LENGTH)
-
 /**
  * @brief Maximum possible size of a message
  */
@@ -66,7 +59,7 @@ static const int g_mask_leading_length = strlen(g_mask_leading_keyword);    ///<
                                      LENGTH_HEX_LENGTH + \
                                      PAYLOAD_HEX_LENGTH)
 
-#define ASCII_MASK_MAX_SIZE         (MASK_HEX_LENGTH)
+#define ASCII_MASK_MAX_SIZE         (MASK_HEX_LENGTH)       ///< The maximum size of the mask in hex ASCII
 
 #define CRC32_INIT_VALUE            UINT32_C(0xFFFFFFFF)    ///< Initial value for CRC32 calculation
 #define CRC32_POLYNOME              UINT32_C(0x04C11DB7)    ///< CRC32 polynome to be used for calculating CRC32
