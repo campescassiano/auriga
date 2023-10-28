@@ -61,7 +61,7 @@ static bool update_message(const message_t *original, message_t *modified)
     memcpy(&modified->data[0], &original->data[0], original->length - CRC_SIZE);
     modified->length = original->length;
 
-    if (append)
+    if (append != 0)
     {
         printf("Info! appending %ld bytes on data bytes\n", append);
         modified->length += append;
@@ -115,7 +115,7 @@ static size_t read_until(FILE *fp, char *dst, size_t size, char delim, bool incl
 
         if (c == delim)
         {
-            if (!inclusive)
+            if (inclusive == false)
                 dst[--read] = '\0';
 
             found = true;
@@ -123,7 +123,7 @@ static size_t read_until(FILE *fp, char *dst, size_t size, char delim, bool incl
         }
     }
 
-    if (found)
+    if (found == true)
         return read;
 
     if (fseek(fp, start, SEEK_SET) != 0)
@@ -156,7 +156,7 @@ static bool load_message(const char *filename, message_t *message)
         return false;
     }
 
-    if (access(filename, F_OK))
+    if (access(filename, F_OK) != 0)
     {
         printf("Error! File \"%s\" does not exist\n", filename);
         g_errno = ERROR_FILE_NOT_EXIST;
@@ -309,7 +309,7 @@ static bool write_output_original(const char *filename, message_t *message, bool
         return false;
     }
 
-    if (append)
+    if (append == true)
         fp = fopen(filename, "a");
     else
         fp = fopen(filename, "w");
@@ -443,7 +443,7 @@ static bool write_output_modified(const char *filename, message_t *message, bool
         return false;
     }
 
-    if (append)
+    if (append == true)
         fp = fopen(filename, "a");
     else
         fp = fopen(filename, "w");
