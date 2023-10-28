@@ -117,8 +117,8 @@ typedef struct message_s {
  * @brief Do the CRC32 for the given data
  *        Source: https://stackoverflow.com/a/21001712/2031180
  *
- * @param src The source data to execute the CRC32
- * @param size the Size of @p src buffer
+ * @param[in] src The source data to execute the CRC32
+ * @param[in] size the Size of @p src buffer
  *
  * @return Returns the CRC value
  */
@@ -143,10 +143,10 @@ static uint32_t do_crc32(const char *src, size_t size)
 /**
  * @brief Convert an hex ASCII string to its binary representation
  *
- * @param src The source buffer where the hex ASCII string is
- * @param src_size The size of the @p src buffer
- * @param dst The destination where we will store the binary representation
- * @param dst_size The size of the @p dst buffer
+ * @param[in] src The source buffer where the hex ASCII string is
+ * @param[in] src_size The size of the @p src buffer
+ * @param[out] dst The destination where we will store the binary representation
+ * @param[in] dst_size The size of the @p dst buffer
  *
  * @return Returns true if conversion succeed; false otherwise
  */
@@ -177,9 +177,9 @@ static bool hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
 /**
  * @brief Apply the requested mask on the tetrads (4 bytes) of the given @p data
  *
- * @param data The data where the mask will be applied to
- * @param size The size of the @p data buffer
- * @param mask The mask that will be used
+ * @param[in,out] data The data where the mask will be applied to
+ * @param[in] size The size of the @p data buffer
+ * @param[in] mask The mask that will be used
  *
  * @return no return; but if the data is not multiple of tetrad, then it wont apply the mask
  */
@@ -212,8 +212,8 @@ static void apply_mask_on_tetrads(char *data, size_t size, uint32_t mask)
  * @brief Update the original message according to the project's specification
  *          which is regarding the data padding, CRC calculation and so on.
  *
- * @param original The original parsed message
- * @param modified The destination where the modified message will be stored
+ * @param[in] original The original parsed message
+ * @param[out] modified The destination where the modified message will be stored
  *
  * @return True if it could update; false otherwise
  */
@@ -257,10 +257,10 @@ static bool update_message(const message_t *original, message_t *modified)
 /**
  * @brief Convert a binary array into its hex ASCII representation
  *
- * @param src The source buffer where the binary data is
- * @param src_size The size of @p src buffer
- * @param dst The destination where the hex ASCII string will be stored
- * @param dst_size The size of @p dst buffer
+ * @param[in] src The source buffer where the binary data is
+ * @param[in] src_size The size of @p src buffer
+ * @param[out] dst The destination where the hex ASCII string will be stored
+ * @param[in] dst_size The size of @p dst buffer
  *
  * @return Returns the number of bytes converted into the @p dst buffer
  */
@@ -287,11 +287,11 @@ static int bin_to_hex(char *src, size_t src_size, char *dst, size_t dst_size)
 /**
  * @brief Function to read from the given file pointer up to the delimiter specified
  *
- * @param fp The file pointer where it should read
- * @param dst The destination where it sould store the read data
- * @param size The size of @p dst buffer
- * @param delim The delimiter that is the anchor for reading
- * @param inclusive If true, then the @p delim will be included in the dst, if false then @p delim will not be included
+ * @param[in] fp The file pointer where it should read
+ * @param[out] dst The destination where it sould store the read data
+ * @param[in] size The size of @p dst buffer
+ * @param[in] delim The delimiter that is the anchor for reading
+ * @param[in] inclusive If true, then the @p delim will be included in the dst, if false then @p delim will not be included
  *
  * @return Returns the number of bytes read considering that it found the delim. If it does not found the delim, it returns 0 and it fseeks() back to where it started (atomic function)
  */
@@ -346,8 +346,8 @@ static size_t read_until(FILE *fp, char *dst, size_t size, char delim, bool incl
 /**
  * @brief Loads the message from the specified file
  *
- * @param filename The filename where should read the message
- * @param message The pointer to the message structure that will store the message
+ * @param[in] filename The filename where should read the message
+ * @param[out] message The pointer to the message structure that will store the message
  */
 static bool load_message(const char *filename, message_t *message)
 {
@@ -497,12 +497,12 @@ static bool load_message(const char *filename, message_t *message)
 /**
  * @brief Appends a pair of header & payload into the given buffer
  *
- * @param dst The destination where it should write the header and payload
- * @param dst_size The size of @p dst buffer
- * @param header The header to be used
- * @param header_size The size of @p header buffer
- * @param payload The payload to be used
- * @param payload_size The size of @p payload buffer
+ * @param[out] dst The destination where it should write the header and payload
+ * @param[in] dst_size The size of @p dst buffer
+ * @param[in] header The header to be used
+ * @param[in] header_size The size of @p header buffer
+ * @param[in] payload The payload to be used
+ * @param[in] payload_size The size of @p payload buffer
  *
  * @return Returns how many bytes it wrote on the @p dst buffer
  */
@@ -545,9 +545,9 @@ static size_t append_header_and_payload_into_buffer(char *dst,
 /**
  * @brief Write the Output file for the original message
  *
- * @param filename The filename of the file to be written
- * @param message The message structure where should get the data
- * @param append If set to true, append if file exists; if false, write over
+ * @param[in] filename The filename of the file to be written
+ * @param[in] message The message structure where should get the data
+ * @param[in] append If set to true, append if file exists; if false, write over
  *
  * @return True if success; false otherwise
  */
@@ -679,9 +679,9 @@ static bool write_output_original(const char *filename, message_t *message, bool
 /**
  * @brief Write the Output file for the modified message
  *
- * @param filename The filename of the file to be written
- * @param message The message structure where should get the data
- * @param append If set to true, append if file exists; if false, write over
+ * @param[in] filename The filename of the file to be written
+ * @param[in] message The message structure where should get the data
+ * @param[in] append If set to true, append if file exists; if false, write over
  *
  * @return True if success; false otherwise
  */
@@ -790,8 +790,8 @@ static bool write_output_modified(const char *filename, message_t *message, bool
 /**
  * @brief Write the error that happened into the output file
  *
- * @param filename The filename to write the error string
- * @param message The message buffer
+ * @param[in] filename The filename to write the error string
+ * @param[in] message The message buffer
  */
 static void write_errors_on_output_file(const char *filename, const message_t *message)
 {
