@@ -15,5 +15,10 @@ There is an `data_in.txt` example, you can run the binary:
 ```
 ./test_is
 ```
+The application will read the `data_in.txt` and parse the message by
+storing the message in a temporary structure.
 
-And it will follow the project description.
+Later, the message is encoded into binary, and manipulated according
+to the requirements on the World documentation.
+
+At the end, the output is written in the `data_out.txt` file.
