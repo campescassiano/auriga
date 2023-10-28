@@ -80,6 +80,8 @@ typedef enum error_e {
     ERROR_BUFFER_SIZE,      ///< Error in buffer size
     ERROR_STRING_FORMAT,    ///< Error in string format
     ERROR_FILE_CREATION,    ///< Error creating the file
+    ERROR_FTELL,            ///< Error in ftell()
+    ERROR_FSEEK,            ///< Error in fseek()
 } error_e;
 
 static error_e g_errno = ERROR_NO_ERROR;            ///< Global application error code
@@ -154,7 +156,10 @@ static bool hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
     char temp[ASCII_HEX_LENGTH] = {0};
 
     if ((src_size >> 1) > dst_size)
+    {
+        g_errno = ERROR_LENGTH;
         return false;
+    }
 
     memset(dst, 0, dst_size);
 
@@ -185,6 +190,7 @@ static void apply_mask_on_tetrads(char *data, size_t size, uint32_t mask)
     if (data == NULL)
     {
         printf("Error! null parameter, %s:%d\n", __func__, __LINE__);
+        g_errno = ERROR_NULL_PARAMETER;
         return;
     }
 
@@ -220,6 +226,7 @@ static bool update_message(const message_t *original, message_t *modified)
     if (original == NULL || modified == NULL)
     {
         printf("Error! Null parameters, %s:%d\n", __func__, __LINE__);
+        g_errno = ERROR_NULL_PARAMETER;
         return false;
     }
 
@@ -261,7 +268,10 @@ static int bin_to_hex(char *src, size_t src_size, char *dst, size_t dst_size)
 {
     size_t i = 0;
     if (src_size * ASCII_HEX_LENGTH > dst_size)
+    {
+        g_errno = ERROR_BUFFER_SIZE;
         return 0;
+    }
 
     memset(dst, 0, dst_size);
 
@@ -293,12 +303,16 @@ static size_t read_until(FILE *fp, char *dst, size_t size, char delim, bool incl
     int c;
 
     if (fp == NULL || dst == NULL)
+    {
+        g_errno = ERROR_NULL_PARAMETER;
         return 0;
+    }
 
     start = ftell(fp);
     if (start == -1L)
     {
         printf("Error! Could not call ftell()\n");
+        g_errno = ERROR_FTELL;
         return 0;
     }
 
@@ -323,6 +337,7 @@ static size_t read_until(FILE *fp, char *dst, size_t size, char delim, bool incl
     if (fseek(fp, start, SEEK_SET) != 0)
     {
         printf("Error! Could not fseek() back to starting point of the file\n");
+        g_errno = ERROR_FSEEK;
     }
 
     return 0;
@@ -787,6 +802,7 @@ static void write_errors_on_output_file(const char *filename, const message_t *m
     if (filename == NULL || message == NULL)
     {
         printf("Error! NULL parameter, %s:%d\n", __func__, __LINE__);
+        g_errno = ERROR_NULL_PARAMETER;
         return;
     }
 
@@ -794,6 +810,7 @@ static void write_errors_on_output_file(const char *filename, const message_t *m
     if (fp == NULL)
     {
         printf("Error! Creating/opening \"%s\" file, %s:%d\n", filename, __func__, __LINE__);
+        g_errno = ERROR_NOT_OPEN_FILE;
         return;
     }
 
@@ -841,6 +858,14 @@ static void write_errors_on_output_file(const char *filename, const message_t *m
 
         case ERROR_FILE_CREATION:
             snprintf(error_string, ERROR_STRING_SIZE, "Error file creation\n");
+            break;
+
+        case ERROR_FTELL:
+            snprintf(error_string, ERROR_STRING_SIZE, "Error calling ftell()\n");
+            break;
+
+        case ERROR_FSEEK:
+            snprintf(error_string, ERROR_STRING_SIZE, "Error calling fseek()\n");
             break;
 
         default:
