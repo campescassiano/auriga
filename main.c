@@ -120,7 +120,7 @@ typedef struct message_s {
  * @param[in] src The source data to execute the CRC32
  * @param[in] size the Size of @p src buffer
  *
- * @return Returns the CRC value
+ * @retval Returns the CRC value
  */
 static uint32_t do_crc32(const char *src, size_t size)
 {
@@ -148,7 +148,7 @@ static uint32_t do_crc32(const char *src, size_t size)
  * @param[out] dst The destination where we will store the binary representation
  * @param[in] dst_size The size of the @p dst buffer
  *
- * @return Returns true if conversion succeed; false otherwise
+ * @retval Returns true if conversion succeed; false otherwise
  */
 static bool hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
 {
@@ -181,7 +181,7 @@ static bool hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
  * @param[in] size The size of the @p data buffer
  * @param[in] mask The mask that will be used
  *
- * @return no return; but if the data is not multiple of tetrad, then it wont apply the mask
+ * @retval no return; but if the data is not multiple of tetrad, then it wont apply the mask
  */
 static void apply_mask_on_tetrads(char *data, size_t size, uint32_t mask)
 {
@@ -215,7 +215,7 @@ static void apply_mask_on_tetrads(char *data, size_t size, uint32_t mask)
  * @param[in] original The original parsed message
  * @param[out] modified The destination where the modified message will be stored
  *
- * @return True if it could update; false otherwise
+ * @retval True if it could update; false otherwise
  */
 static bool update_message(const message_t *original, message_t *modified)
 {
@@ -262,7 +262,7 @@ static bool update_message(const message_t *original, message_t *modified)
  * @param[out] dst The destination where the hex ASCII string will be stored
  * @param[in] dst_size The size of @p dst buffer
  *
- * @return Returns the number of bytes converted into the @p dst buffer
+ * @retval Returns the number of bytes converted into the @p dst buffer
  */
 static int bin_to_hex(char *src, size_t src_size, char *dst, size_t dst_size)
 {
@@ -293,7 +293,7 @@ static int bin_to_hex(char *src, size_t src_size, char *dst, size_t dst_size)
  * @param[in] delim The delimiter that is the anchor for reading
  * @param[in] inclusive If true, then the @p delim will be included in the dst, if false then @p delim will not be included
  *
- * @return Returns the number of bytes read considering that it found the delim. If it does not found the delim, it returns 0 and it fseeks() back to where it started (atomic function)
+ * @retval Returns the number of bytes read considering that it found the delim. If it does not found the delim, it returns 0 and it fseeks() back to where it started (atomic function)
  */
 static size_t read_until(FILE *fp, char *dst, size_t size, char delim, bool inclusive)
 {
@@ -504,7 +504,7 @@ static bool load_message(const char *filename, message_t *message)
  * @param[in] payload The payload to be used
  * @param[in] payload_size The size of @p payload buffer
  *
- * @return Returns how many bytes it wrote on the @p dst buffer
+ * @retval Returns how many bytes it wrote on the @p dst buffer
  */
 static size_t append_header_and_payload_into_buffer(char *dst,
                                                     size_t dst_size,
@@ -549,7 +549,7 @@ static size_t append_header_and_payload_into_buffer(char *dst,
  * @param[in] message The message structure where should get the data
  * @param[in] append If set to true, append if file exists; if false, write over
  *
- * @return True if success; false otherwise
+ * @retval True if success; false otherwise
  */
 static bool write_output_original(const char *filename, message_t *message, bool append)
 {
@@ -683,7 +683,7 @@ static bool write_output_original(const char *filename, message_t *message, bool
  * @param[in] message The message structure where should get the data
  * @param[in] append If set to true, append if file exists; if false, write over
  *
- * @return True if success; false otherwise
+ * @retval True if success; false otherwise
  */
 static bool write_output_modified(const char *filename, message_t *message, bool append)
 {
