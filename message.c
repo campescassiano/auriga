@@ -9,6 +9,7 @@
 #include "file_ops.h"
 #include "utils.h"
 #include "crc32.h"
+#include "debug.h"
 
 bool message_load(const char *filename, message_t *message)
 {
@@ -20,14 +21,14 @@ bool message_load(const char *filename, message_t *message)
 
     if (filename == NULL || message == NULL)
     {
-        printf("Error! NULL parameter, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("NULL parameter");
         g_errno = ERROR_NULL_PARAMETER;
         return false;
     }
 
     if (access(filename, F_OK) != 0)
     {
-        printf("Error! File \"%s\" does not exist\n", filename);
+        DEBUG_ERROR("File \"%s\" does not exist", filename);
         g_errno = ERROR_FILE_NOT_EXIST;
         return false;
     }
@@ -35,7 +36,7 @@ bool message_load(const char *filename, message_t *message)
     fp = fopen(filename, "r");
     if (fp == NULL)
     {
-        printf("Error! Could not open file \"%s\"\n", filename);
+        DEBUG_ERROR("Could not open file \"%s\"", filename);
         g_errno = ERROR_NOT_OPEN_FILE;
         return false;
     }
@@ -43,7 +44,7 @@ bool message_load(const char *filename, message_t *message)
     size = file_ops_read_until(fp, keyword_message, sizeof(keyword_message), '=', DELIMITER_INCLUSIVE);
     if (size != sizeof(g_message_leading_keyword) - 1)
     {
-        printf("Error! Read data different from expected\n");
+        DEBUG_ERROR("Read data different from expected");
         fclose(fp);
         g_errno = ERROR_DATA_NOT_EXPECTED;
         return false;
@@ -52,7 +53,7 @@ bool message_load(const char *filename, message_t *message)
     if (strncmp(keyword_message, g_message_leading_keyword,
                 MAX(strlen(keyword_message), strlen(g_message_leading_keyword))) != 0)
     {
-        printf("Error! Could not find anchor \"%s\" on the file\n", g_message_leading_keyword);
+        DEBUG_ERROR("Could not find anchor \"%s\" on the file", g_message_leading_keyword);
         fclose(fp);
         g_errno = ERROR_DATA_NOT_EXPECTED;
         return false;
@@ -61,7 +62,7 @@ bool message_load(const char *filename, message_t *message)
     size = fread(ascii_byte, sizeof(uint8_t), MIN(ASCII_HEX_LENGTH, sizeof(ascii_byte)), fp);
     if (size != ASCII_HEX_LENGTH)
     {
-        printf("Error! Could not read correctly, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not read correctly");
         fclose(fp);
         g_errno = ERROR_DATA_NOT_EXPECTED;
         return false;
@@ -71,7 +72,7 @@ bool message_load(const char *filename, message_t *message)
     size = fread(ascii_byte, sizeof(uint8_t), MIN(ASCII_HEX_LENGTH, sizeof(ascii_byte)), fp);
     if (size != ASCII_HEX_LENGTH)
     {
-        printf("Error! Could not read correctly, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not read correctly");
         fclose(fp);
         g_errno = ERROR_READING_FILE;
         return false;
@@ -83,7 +84,7 @@ bool message_load(const char *filename, message_t *message)
                                        '\n', DELIMITER_EXCLUSIVE);
     if (message->message.size != (message->length * ASCII_HEX_LENGTH))
     {
-        printf("Error! Wrong message size, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Wrong message size");
         g_errno = ERROR_LENGTH;
         return false;
     }
@@ -91,7 +92,7 @@ bool message_load(const char *filename, message_t *message)
     size = file_ops_read_until(fp, keyword_mask, sizeof(keyword_mask), '=', DELIMITER_INCLUSIVE);
     if (size != sizeof(keyword_mask) - 1)
     {
-        printf("Error! Read data different from expected, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Read data different from expected");
         fclose(fp);
         g_errno = ERROR_DATA_NOT_EXPECTED;
         return false;
@@ -100,7 +101,7 @@ bool message_load(const char *filename, message_t *message)
     if (strncmp(keyword_mask, g_mask_leading_keyword,
                 MAX(strlen(keyword_mask), strlen(g_mask_leading_keyword))) != 0)
     {
-        printf("Error! Could not find anchor \"%s\" on the file, %s:%d\n", g_mask_leading_keyword, __func__, __LINE__);
+        DEBUG_ERROR("Error! Could not find anchor \"%s\" on the file", filename);
         fclose(fp);
         return false;
     }
@@ -108,7 +109,7 @@ bool message_load(const char *filename, message_t *message)
     message->mask.size = file_ops_read_until(fp, message->mask.raw, sizeof(message->mask.raw), '\n', DELIMITER_EXCLUSIVE);
     if (message->mask.size != MASK_HEX_LENGTH)
     {
-        printf("Error! Wrong message size, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Wrong message size");
         g_errno = ERROR_LENGTH;
         return false;
     }
@@ -116,7 +117,7 @@ bool message_load(const char *filename, message_t *message)
     if (utils_hex_to_bin(message->message.raw, message->length * ASCII_HEX_LENGTH - CRC32_HEX_LENGTH,
                          message->data, sizeof(message->data)) == false)
     {
-        printf("Error! Could not convert hex to bin, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not convert hex to bin");
         fclose(fp);
         g_errno = ERROR_CONVERSION;
         return false;
@@ -127,7 +128,7 @@ bool message_load(const char *filename, message_t *message)
     if (utils_hex_to_bin(&message->message.raw[pos], CRC32_HEX_LENGTH,
                          message->crc, sizeof(message->crc)) == false)
     {
-        printf("Error! Could not convert hex to bin, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not convert hex to bin");
         fclose(fp);
         g_errno = ERROR_CONVERSION;
         return false;
@@ -137,7 +138,7 @@ bool message_load(const char *filename, message_t *message)
 
     if (htonl(*(uint32_t*)message->crc) != calculated)
     {
-        printf("Error! Wrong CRC, should be=%"PRIu32", got=%"PRIu32", %s:%d\n", calculated, htonl(*(uint32_t*)message->crc), __func__, __LINE__);
+        DEBUG_ERROR("Wrong CRC, should be=%"PRIu32", got=%"PRIu32"", calculated, htonl(*(uint32_t*)message->crc));
         fclose(fp);
         g_errno = ERROR_CRC;
         return false;
@@ -145,7 +146,7 @@ bool message_load(const char *filename, message_t *message)
 
     if (utils_hex_to_bin(message->mask.raw, message->mask.size, message->mask_val, sizeof(message->mask_val)) == false)
     {
-        printf("Error! Could not convert hex to bin\n");
+        DEBUG_ERROR("Could not convert hex to bin");
         fclose(fp);
         g_errno = ERROR_CONVERSION;
         return false;
@@ -164,7 +165,7 @@ bool message_update(const message_t *original, message_t *modified)
 
     if (original == NULL || modified == NULL)
     {
-        printf("Error! Null parameters, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Null parameter");
         g_errno = ERROR_NULL_PARAMETER;
         return false;
     }
@@ -180,7 +181,7 @@ bool message_update(const message_t *original, message_t *modified)
 
     if (append != 0)
     {
-        printf("Info! appending %ld bytes on data bytes\n", append);
+        DEBUG_INFO("Info! appending %ld bytes on data bytes", append);
         modified->length += append;
         memset(&modified->data[(uint8_t)modified->length], 0, sizeof(char) * append);
     }

@@ -5,6 +5,7 @@
 #include "file_ops.h"
 #include "errors.h"
 #include "utils.h"
+#include "debug.h"
 
 bool file_ops_write_output_original(const char *filename, message_t *message, bool append)
 {
@@ -16,7 +17,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
 
     if (filename == NULL || message == NULL)
     {
-        printf("Error! NULL parameter, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("NULL parameter");
         g_errno = ERROR_NULL_PARAMETER;
         return false;
     }
@@ -28,7 +29,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
 
     if (fp == NULL)
     {
-        printf("Error! Creating/opening \"%s\" file, %s:%d\n", filename, __func__, __LINE__);
+        DEBUG_ERROR("Creating/opening \"%s\" file", filename);
         g_errno = ERROR_FILE_CREATION;
         return false;
     }
@@ -37,7 +38,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
                                temporary, sizeof(temporary));
     if (written == 0)
     {
-        printf("Error! could not convert bin to hex, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not convert bin to hex");
         g_errno = ERROR_CONVERSION;
         return false;
     }
@@ -50,7 +51,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
                                                           strlen(temporary));
     if (written == 0)
     {
-        printf("Error! Failed to append header and payload, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Failed to append header and payload");
         g_errno = ERROR_STRING_FORMAT;
         return false;
     }
@@ -60,7 +61,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
                                temporary, sizeof(temporary));
     if (written == 0)
     {
-        printf("Error! could not convert bin to hex, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not convert bin to hex");
         g_errno = ERROR_CONVERSION;
         return false;
     }
@@ -73,7 +74,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
                                                           strlen(temporary));
     if (written == 0)
     {
-        printf("Error! Failed to append header and payload, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Failed to append header and payload");
         g_errno = ERROR_STRING_FORMAT;
         return false;
     }
@@ -83,7 +84,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
                                temporary, sizeof(temporary));
     if (written == 0)
     {
-        printf("Error! could not convert bin to hex, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not convert bin to hex");
         g_errno = ERROR_CONVERSION;
         return false;
     }
@@ -96,7 +97,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
                                                           strlen(temporary));
     if (written == 0)
     {
-        printf("Error! Failed to append header and payload, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Failed to append header and payload");
         g_errno = ERROR_STRING_FORMAT;
         return false;
     }
@@ -106,7 +107,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
                                temporary, sizeof(temporary));
     if (written == 0)
     {
-        printf("Error! could not convert bin to hex, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not convert bin to hex");
         g_errno = ERROR_CONVERSION;
         return false;
     }
@@ -119,7 +120,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
                                                           strlen(temporary));
     if (written == 0)
     {
-        printf("Error! Failed to append header and payload, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Failed to append header and payload");
         g_errno = ERROR_STRING_FORMAT;
         return false;
     }
@@ -141,7 +142,7 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
 
     if (filename == NULL || message == NULL)
     {
-        printf("Error! NULL parameter, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("NULL parameter");
         g_errno = ERROR_NULL_PARAMETER;
         return false;
     }
@@ -153,7 +154,7 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
 
     if (fp == NULL)
     {
-        printf("Error! Creating/opening \"%s\" file, %s:%d\n", filename, __func__, __LINE__);
+        DEBUG_ERROR("Creating/opening \"%s\" file", filename);
         g_errno = ERROR_FILE_CREATION;
         return false;
     }
@@ -162,7 +163,7 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
                                temporary, sizeof(temporary));
     if (written == 0)
     {
-        printf("Error! could not convert bin to hex, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not convert bin to hex");
         g_errno = ERROR_CONVERSION;
         return false;
     }
@@ -175,7 +176,7 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
                                                           strlen(temporary));
     if (written == 0)
     {
-        printf("Error! Failed to append header and payload, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Failed to append header and payload");
         g_errno = ERROR_STRING_FORMAT;
         return false;
     }
@@ -185,7 +186,7 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
                                temporary, sizeof(temporary));
     if (written == 0)
     {
-        printf("Error! could not convert bin to hex, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not convert bin to hex");
         g_errno = ERROR_CONVERSION;
         return false;
     }
@@ -198,7 +199,7 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
                                                           strlen(temporary));
     if (written == 0)
     {
-        printf("Error! Failed to append header and payload, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Failed to append header and payload");
         g_errno = ERROR_STRING_FORMAT;
         return false;
     }
@@ -208,7 +209,7 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
                                temporary, sizeof(temporary));
     if (written == 0)
     {
-        printf("Error! could not convert bin to hex, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not convert bin to hex");
         g_errno = ERROR_CONVERSION;
         return false;
     }
@@ -221,7 +222,7 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
                                                           strlen(temporary));
     if (written == 0)
     {
-        printf("Error! Failed to append header and payload, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Failed to append header and payload");
         g_errno = ERROR_STRING_FORMAT;
         return false;
     }
@@ -249,7 +250,7 @@ size_t file_ops_read_until(FILE *fp, char *dst, size_t size, char delim, bool in
     start = ftell(fp);
     if (start == -1L)
     {
-        printf("Error! Could not call ftell()\n");
+        DEBUG_ERROR("Could not call ftell()");
         g_errno = ERROR_FTELL;
         return 0;
     }
@@ -274,7 +275,7 @@ size_t file_ops_read_until(FILE *fp, char *dst, size_t size, char delim, bool in
 
     if (fseek(fp, start, SEEK_SET) != 0)
     {
-        printf("Error! Could not fseek() back to starting point of the file\n");
+        DEBUG_ERROR("Could not fseek() back to starting point of the file");
         g_errno = ERROR_FSEEK;
     }
 

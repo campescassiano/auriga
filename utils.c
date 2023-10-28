@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #include "utils.h"
+#include "debug.h"
 
 bool utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
 {
@@ -54,7 +55,7 @@ void utils_apply_mask_on_tetrads(char *data, size_t size, uint32_t mask)
 
     if (data == NULL)
     {
-        printf("Error! null parameter, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("NULL parameter");
         g_errno = ERROR_NULL_PARAMETER;
         return;
     }
@@ -84,7 +85,7 @@ size_t utils_append_header_and_payload_into_buffer(char *dst,
 
     if (dst == NULL || header == NULL || payload == NULL)
     {
-        printf("Error! Null parameters received, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("NULL parameter");
         g_errno = ERROR_NULL_PARAMETER;
         return 0;
     }
@@ -93,7 +94,7 @@ size_t utils_append_header_and_payload_into_buffer(char *dst,
 
     if ((header_size + payload_size) >= dst_size)
     {
-        printf("Error! Destination buffer is smaller than the data to be formatted, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Destination buffer is smaller than required");
         g_errno = ERROR_BUFFER_SIZE;
         return 0;
     }
@@ -101,7 +102,7 @@ size_t utils_append_header_and_payload_into_buffer(char *dst,
     wrote = snprintf(dst, dst_size, "%s%s\n", header, payload);
     if (wrote == 0)
     {
-        printf("Error! could not format string, %s:%d\n", __func__, __LINE__);
+        DEBUG_ERROR("Could not format string");
         g_errno = ERROR_STRING_FORMAT;
         return false;
     }

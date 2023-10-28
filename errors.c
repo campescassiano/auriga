@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "errors.h"
+#include "debug.h"
 
 #define ERROR_STRING_SIZE           UINT8_C(255)    ///< The size of error string
 
@@ -17,7 +18,8 @@ void error_write_error_on_file(const char *filename)
 
     if (filename == NULL)
     {
-        printf("Error! NULL parameter, %s:%d\n", __func__, __LINE__);
+
+        DEBUG_ERROR("NULL parameter");
         g_errno = ERROR_NULL_PARAMETER;
         return;
     }
@@ -25,7 +27,7 @@ void error_write_error_on_file(const char *filename)
     fp = fopen(filename, "w");
     if (fp == NULL)
     {
-        printf("Error! Creating/opening \"%s\" file, %s:%d\n", filename, __func__, __LINE__);
+        DEBUG_ERROR("Creating/opening \"%s\" file", filename);
         g_errno = ERROR_NOT_OPEN_FILE;
         return;
     }
@@ -91,7 +93,7 @@ void error_write_error_on_file(const char *filename)
 
     wrote = fwrite(error_string, sizeof(char), strlen(error_string), fp);
     if (wrote == 0)
-        printf("Error! Could not write into file \"%s\"\n", filename);
+        DEBUG_ERROR("Could not write into file \"%s\"", filename);
 
     fclose(fp);
 }
