@@ -49,7 +49,8 @@ bool message_load(const char *filename, message_t *message)
         return false;
     }
 
-    if (strcmp(keyword_message, g_message_leading_keyword) != 0)
+    if (strncmp(keyword_message, g_message_leading_keyword,
+                MAX(strlen(keyword_message), strlen(g_message_leading_keyword))) != 0)
     {
         printf("Error! Could not find anchor \"%s\" on the file\n", g_message_leading_keyword);
         fclose(fp);
@@ -96,7 +97,8 @@ bool message_load(const char *filename, message_t *message)
         return false;
     }
 
-    if (strcmp(keyword_mask, g_mask_leading_keyword) != 0)
+    if (strncmp(keyword_mask, g_mask_leading_keyword,
+                MAX(strlen(keyword_mask), strlen(g_mask_leading_keyword))) != 0)
     {
         printf("Error! Could not find anchor \"%s\" on the file, %s:%d\n", g_mask_leading_keyword, __func__, __LINE__);
         fclose(fp);

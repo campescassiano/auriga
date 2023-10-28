@@ -10,6 +10,7 @@
 #include "errors.h"
 
 #define MIN(a,b) (((a)<(b))?(a):(b))        ///< Definition of MIN() function
+#define MAX(a,b) (((a)>(b))?(a):(b))        ///< Definition of MAX() function
 
 /**
  * @brief Convert an hex ASCII string to its binary representation
