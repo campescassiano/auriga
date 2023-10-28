@@ -21,7 +21,7 @@ bool utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
     {
         memcpy(temp, src, 2);
         temp[2] = '\0';
-        dst[i] = (unsigned int) strtoul(temp, NULL, 16);
+        dst[i] = 0xff & (unsigned int) strtoul(temp, NULL, 16);
         src += ASCII_HEX_LENGTH;
     }
 

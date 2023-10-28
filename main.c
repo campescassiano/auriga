@@ -196,7 +196,7 @@ static bool load_message(const char *filename, message_t *message)
         g_errno = ERROR_DATA_NOT_EXPECTED;
         return false;
     }
-    message->type = strtoul(ascii_byte, NULL, 16);
+    message->type = 0xff & strtoul(ascii_byte, NULL, 16);
 
     size = fread(ascii_byte, sizeof(uint8_t), MIN(ASCII_HEX_LENGTH, sizeof(ascii_byte)), fp);
     if (size != ASCII_HEX_LENGTH)
@@ -206,7 +206,7 @@ static bool load_message(const char *filename, message_t *message)
         g_errno = ERROR_READING_FILE;
         return false;
     }
-    message->length = strtoul(ascii_byte, NULL, 16);
+    message->length = 0xff & strtoul(ascii_byte, NULL, 16);
 
     message->message.size = read_until(fp, message->message.raw,
                                        sizeof(message->message.raw),
