@@ -1,14 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -eu
 set -o pipefail
 
 output="test_is"
 
-gcc -Wall main.c -o $output
+gcc -Wall main.c errors.c crc32.c utils.c -o $output
 
-if [[ "$#" -eq 0 ]]; then
-    echo "Build completed, output=$output"
-else
-    echo "Error during build"
-fi
+echo "Build completed, output=$output"
