@@ -2,10 +2,10 @@
 
 ## Building
 
-To build, you can simply run the `build.sh` script.
+You can simply make it using the makefile:
 
 ```
-./build.sh
+make
 ```
 
 ## To execute
