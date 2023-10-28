@@ -3,6 +3,18 @@
 
 #include <stdint.h>
 #include <inttypes.h>
+#include <stdbool.h>
+
+#define DELIMITER_INCLUSIVE         (true)  ///< Read until marker found, include marker
+#define DELIMITER_EXCLUSIVE         (false) ///< Read until marker is found, do not include marker
+
+#define ALIGN_APPEND                UINT8_C(4)      ///< Definition of the requested alignment
+
+static const char g_message_leading_keyword[] = "mess=";    ///< leading keyword for message
+static const int g_message_leading_length = strlen(g_message_leading_keyword);  ///< leading keyword message length
+
+static const char g_mask_leading_keyword[] = "mask=";       ///< leading keyword for mask
+static const int g_mask_leading_length = strlen(g_mask_leading_keyword);    ///< leading keyword mask length
 
 /**
  * @brief The below definitions are related to the raw data sizes (binary form)
@@ -63,5 +75,24 @@ typedef struct message_s {
         size_t size;                            ///< The size of the mask read from the file
     } mask;
 } message_t;
+
+/**
+ * @brief Loads the message from the specified file
+ *
+ * @param[in] filename The filename where should read the message
+ * @param[out] message The pointer to the message structure that will store the message
+ */
+bool message_load(const char *filename, message_t *message);
+
+/**
+ * @brief Update the original message according to the project's specification
+ *          which is regarding the data padding, CRC calculation and so on.
+ *
+ * @param[in] original The original parsed message
+ * @param[out] modified The destination where the modified message will be stored
+ *
+ * @retval True if it could update; false otherwise
+ */
+bool message_update(const message_t *original, message_t *modified);
 
 #endif /* MESSAGE_H__ */
