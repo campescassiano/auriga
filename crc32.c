@@ -4,5 +4,5 @@
 
 uint32_t crc32_calculate(const char *src, size_t size)
 {
-    return crc32(CRC32_INIT_VALUE, (const Bytef *) src, size);
+    return (uint32_t) crc32(CRC32_INIT_VALUE, (const Bytef *) src, (uInt) size);
 }

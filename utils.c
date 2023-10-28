@@ -5,7 +5,7 @@
 #include "utils.h"
 #include "debug.h"
 
-bool utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
+size_t utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
 {
     char temp[ASCII_HEX_LENGTH + 1] = {0};
     size_t i = 0;
@@ -24,7 +24,7 @@ bool utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
         memcpy(&temp[0], &src[0], 2);
         temp[2] = '\0';
 
-        dst[i] = 0xff & (unsigned int) strtoul(temp, &endptr, 16);
+        dst[i] = (char) (0xff & (unsigned int) strtoul(temp, &endptr, 16));
         if (*endptr != '\0')
         {
             g_errno = ERROR_INVALID_HEX;
@@ -34,10 +34,10 @@ bool utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
         src += ASCII_HEX_LENGTH;
     }
 
-    return true;
+    return i;
 }
 
-int utils_bin_to_hex(char *src, size_t src_size, char *dst, size_t dst_size)
+size_t utils_bin_to_hex(char *src, size_t src_size, char *dst, size_t dst_size)
 {
     size_t i = 0;
     if (src_size * ASCII_HEX_LENGTH > dst_size)
@@ -89,7 +89,7 @@ size_t utils_append_header_and_payload_into_buffer(char *dst,
                                                    char *payload,
                                                    size_t payload_size)
 {
-    size_t wrote = 0;
+    int wrote = 0;
 
     if (dst == NULL || header == NULL || payload == NULL)
     {
@@ -115,6 +115,6 @@ size_t utils_append_header_and_payload_into_buffer(char *dst,
         return false;
     }
 
-    return wrote;
+    return (size_t) wrote;
 }
 

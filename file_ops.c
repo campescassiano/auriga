@@ -80,7 +80,7 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
     }
     pos += written;
 
-    written = utils_bin_to_hex(message->data, MIN(message->length - CRC_SIZE, sizeof(message->data)),
+    written = utils_bin_to_hex(message->data, MIN((size_t) message->length - CRC_SIZE, sizeof(message->data)),
                                temporary, sizeof(temporary));
     if (written == 0)
     {
@@ -182,7 +182,7 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
     }
     pos += written;
 
-    written = utils_bin_to_hex(message->data, MIN(message->length - CRC_SIZE, sizeof(message->data)),
+    written = utils_bin_to_hex(message->data, MIN((size_t) message->length - CRC_SIZE, sizeof(message->data)),
                                temporary, sizeof(temporary));
     if (written == 0)
     {

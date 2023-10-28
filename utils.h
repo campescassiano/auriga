@@ -9,8 +9,8 @@
 #include "message.h"
 #include "errors.h"
 
-#define MIN(a,b) (((a)<(b))?(a):(b))        ///< Definition of MIN() function
-#define MAX(a,b) (((a)>(b))?(a):(b))        ///< Definition of MAX() function
+#define MIN(a,b) (size_t)(((a)<(b))?(a):(b))        ///< Definition of MIN() function
+#define MAX(a,b) (size_t)(((a)>(b))?(a):(b))        ///< Definition of MAX() function
 
 /**
  * @brief Convert an hex ASCII string to its binary representation
@@ -20,9 +20,9 @@
  * @param[out] dst The destination where we will store the binary representation
  * @param[in] dst_size The size of the @p dst buffer
  *
- * @retval Returns true if conversion succeed; false otherwise
+ * @return Returns the number of bytes converted into the @p dst buffer
  */
-bool utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size);
+size_t utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size);
 
 /**
  * @brief Convert a binary array into its hex ASCII representation
@@ -32,9 +32,9 @@ bool utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size);
  * @param[out] dst The destination where the hex ASCII string will be stored
  * @param[in] dst_size The size of @p dst buffer
  *
- * @retval Returns the number of bytes converted into the @p dst buffer
+ * @return Returns the number of bytes converted into the @p dst buffer
  */
-int utils_bin_to_hex(char *src, size_t src_size, char *dst, size_t dst_size);
+size_t utils_bin_to_hex(char *src, size_t src_size, char *dst, size_t dst_size);
 
 /**
  * @brief Apply the requested mask on the tetrads (4 bytes) of the given @p data

@@ -67,7 +67,7 @@ bool message_load(const char *filename, message_t *message)
         g_errno = ERROR_DATA_NOT_EXPECTED;
         return false;
     }
-    message->type = 0xff & strtoul(ascii_byte, NULL, 16);
+    message->type = (char)(0xff & strtoul(ascii_byte, NULL, 16));
 
     size = fread(ascii_byte, sizeof(uint8_t), MIN(ASCII_HEX_LENGTH, sizeof(ascii_byte)), fp);
     if (size != ASCII_HEX_LENGTH)
@@ -77,12 +77,12 @@ bool message_load(const char *filename, message_t *message)
         g_errno = ERROR_READING_FILE;
         return false;
     }
-    message->length = 0xff & strtoul(ascii_byte, NULL, 16);
+    message->length = (char)(0xff & strtoul(ascii_byte, NULL, 16));
 
     message->message.size = file_ops_read_until(fp, message->message.raw,
                                        sizeof(message->message.raw),
                                        '\n', DELIMITER_EXCLUSIVE);
-    if (message->message.size != (message->length * ASCII_HEX_LENGTH))
+    if (message->message.size != ((size_t) message->length * ASCII_HEX_LENGTH))
     {
         DEBUG_ERROR("Wrong message size");
         g_errno = ERROR_LENGTH;
@@ -114,7 +114,7 @@ bool message_load(const char *filename, message_t *message)
         return false;
     }
 
-    if (utils_hex_to_bin(message->message.raw, message->length * ASCII_HEX_LENGTH - CRC32_HEX_LENGTH,
+    if (utils_hex_to_bin(message->message.raw, (size_t) message->length * ASCII_HEX_LENGTH - CRC32_HEX_LENGTH,
                          message->data, sizeof(message->data)) == false)
     {
         DEBUG_ERROR("Could not convert hex to bin");
@@ -123,7 +123,7 @@ bool message_load(const char *filename, message_t *message)
         return false;
     }
 
-    size_t pos = message->length * ASCII_HEX_LENGTH - CRC32_HEX_LENGTH;
+    size_t pos = (size_t) message->length * ASCII_HEX_LENGTH - CRC32_HEX_LENGTH;
 
     if (utils_hex_to_bin(&message->message.raw[pos], CRC32_HEX_LENGTH,
                          message->crc, sizeof(message->crc)) == false)
@@ -134,11 +134,11 @@ bool message_load(const char *filename, message_t *message)
         return false;
     }
 
-    uint32_t calculated = crc32_calculate(message->data, message->length - CRC_SIZE);
+    uint32_t calculated = crc32_calculate(message->data, (size_t) message->length - CRC_SIZE);
 
     if (htonl(*(uint32_t*)message->crc) != calculated)
     {
-        DEBUG_ERROR("Wrong CRC, should be=%"PRIu32", got=%"PRIu32"", calculated, htonl(*(uint32_t*)message->crc));
+        DEBUG_ERROR("Wrong CRC, should be=%08x, got=%08x", calculated, htonl(*(uint32_t*)message->crc));
         fclose(fp);
         g_errno = ERROR_CRC;
         return false;
@@ -174,21 +174,21 @@ bool message_update(const message_t *original, message_t *modified)
 
     memcpy((char*)&mask, &original->mask_val[0], sizeof(uint32_t));
 
-    append = (original->length - CRC_SIZE) % ALIGN_APPEND;
+    append = ((size_t) original->length - CRC_SIZE) % ALIGN_APPEND;
 
-    memcpy(&modified->data[0], &original->data[0], original->length - CRC_SIZE);
+    memcpy(&modified->data[0], &original->data[0], (size_t) original->length - CRC_SIZE);
     modified->length = original->length;
 
     if (append != 0)
     {
         DEBUG_WARN("Info! appending %ld bytes on data bytes", append);
-        modified->length += append;
+        modified->length += (char) append;
         memset(&modified->data[(uint8_t)modified->length], 0, sizeof(char) * append);
     }
 
-    utils_apply_mask_on_tetrads(modified->data, modified->length - CRC_SIZE, *(uint32_t*)&original->mask_val);
+    utils_apply_mask_on_tetrads(modified->data, (size_t) modified->length - CRC_SIZE, *(uint32_t*)&original->mask_val);
 
-    crc = crc32_calculate(modified->data, modified->length - CRC_SIZE);
+    crc = crc32_calculate(modified->data, (size_t) modified->length - CRC_SIZE);
     memcpy(&modified->crc[0], (char*)&crc, sizeof(uint32_t));
 
     return true;
