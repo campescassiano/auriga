@@ -44,8 +44,8 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
 
     written = utils_append_header_and_payload_into_buffer(&msg[pos],
                                                           sizeof(msg) - pos,
-                                                          "message type:",
-                                                          strlen("message type:"),
+                                                          "message type: 0x",
+                                                          strlen("message type: 0x"),
                                                           temporary,
                                                           strlen(temporary));
     if (written == 0)
@@ -67,8 +67,8 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
 
     written = utils_append_header_and_payload_into_buffer(&msg[pos],
                                                           sizeof(msg) - pos,
-                                                          "initial message length:",
-                                                          strlen("initial mesage length:"),
+                                                          "initial message length: 0x",
+                                                          strlen("initial mesage length: 0x"),
                                                           temporary,
                                                           strlen(temporary));
     if (written == 0)
@@ -90,8 +90,8 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
 
     written = utils_append_header_and_payload_into_buffer(&msg[pos],
                                                           sizeof(msg) - pos,
-                                                          "initial message data bytes:",
-                                                          strlen("initial mesage data bytes:"),
+                                                          "initial message data bytes: 0x",
+                                                          strlen("initial mesage data bytes: 0x"),
                                                           temporary,
                                                           strlen(temporary));
     if (written == 0)
@@ -113,8 +113,8 @@ bool file_ops_write_output_original(const char *filename, message_t *message, bo
 
     written = utils_append_header_and_payload_into_buffer(&msg[pos],
                                                           sizeof(msg) - pos,
-                                                          "initial CRC-32:",
-                                                          strlen("initial CRC-32:"),
+                                                          "initial CRC-32: 0x",
+                                                          strlen("initial CRC-32: 0x"),
                                                           temporary,
                                                           strlen(temporary));
     if (written == 0)
@@ -169,8 +169,8 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
 
     written = utils_append_header_and_payload_into_buffer(&msg[pos],
                                                           sizeof(msg) - pos,
-                                                          "modified message length:",
-                                                          strlen("modified mesage length:"),
+                                                          "modified message length: 0x",
+                                                          strlen("modified mesage length: 0x"),
                                                           temporary,
                                                           strlen(temporary));
     if (written == 0)
@@ -192,8 +192,8 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
 
     written = utils_append_header_and_payload_into_buffer(&msg[pos],
                                                           sizeof(msg) - pos,
-                                                          "modified message data bytes with mask:",
-                                                          strlen("modified mesage data bytes with mask:"),
+                                                          "modified message data bytes with mask: 0x",
+                                                          strlen("modified mesage data bytes with mask: 0x"),
                                                           temporary,
                                                           strlen(temporary));
     if (written == 0)
@@ -215,8 +215,8 @@ bool file_ops_write_output_modified(const char *filename, message_t *message, bo
 
     written = utils_append_header_and_payload_into_buffer(&msg[pos],
                                                           sizeof(msg) - pos,
-                                                          "modified CRC-32:",
-                                                          strlen("modified CRC-32:"),
+                                                          "modified CRC-32: 0x",
+                                                          strlen("modified CRC-32: 0x"),
                                                           temporary,
                                                           strlen(temporary));
     if (written == 0)
