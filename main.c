@@ -54,11 +54,11 @@ static bool update_message(const message_t *original, message_t *modified)
 
     modified->type = original->type;
 
-    memcpy((char*)&mask, original->mask_val, sizeof(uint32_t));
+    memcpy((char*)&mask, &original->mask_val[0], sizeof(uint32_t));
 
     append = (original->length - CRC_SIZE) % ALIGN_APPEND;
 
-    memcpy(modified->data, original->data, original->length - CRC_SIZE);
+    memcpy(&modified->data[0], &original->data[0], original->length - CRC_SIZE);
     modified->length = original->length;
 
     if (append)
@@ -71,7 +71,7 @@ static bool update_message(const message_t *original, message_t *modified)
     utils_apply_mask_on_tetrads(modified->data, modified->length - CRC_SIZE, *(uint32_t*)&original->mask_val);
 
     crc = crc32_calculate(modified->data, modified->length - CRC_SIZE);
-    memcpy(modified->crc, (char*)&crc, sizeof(uint32_t));
+    memcpy(&modified->crc[0], (char*)&crc, sizeof(uint32_t));
 
     return true;
 }

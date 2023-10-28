@@ -19,7 +19,7 @@ bool utils_hex_to_bin(char *src, size_t src_size, char *dst, size_t dst_size)
 
     for (i = 0; i < (src_size >> 1); ++i)
     {
-        memcpy(temp, src, 2);
+        memcpy(&temp[0], &src[0], 2);
         temp[2] = '\0';
         dst[i] = 0xff & (unsigned int) strtoul(temp, NULL, 16);
         src += ASCII_HEX_LENGTH;
