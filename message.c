@@ -181,7 +181,7 @@ bool message_update(const message_t *original, message_t *modified)
 
     if (append != 0)
     {
-        DEBUG_INFO("Info! appending %ld bytes on data bytes", append);
+        DEBUG_WARN("Info! appending %ld bytes on data bytes", append);
         modified->length += append;
         memset(&modified->data[(uint8_t)modified->length], 0, sizeof(char) * append);
     }

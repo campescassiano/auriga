@@ -19,6 +19,7 @@ typedef enum error_e {
     ERROR_FILE_CREATION,    ///< Error creating the file
     ERROR_FTELL,            ///< Error in ftell()
     ERROR_FSEEK,            ///< Error in fseek()
+    ERROR_INVALID_HEX,      ///< The value is not hex
 } error_e;
 
 extern error_e g_errno;     ///< Forward declaration of the global error variable

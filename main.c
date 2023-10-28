@@ -23,6 +23,9 @@ int main(int argc, char **argv)
     message_t original_message;
     message_t modified_message;
 
+    (void) argc;
+    (void) argv;
+
     if (message_load(INPUT_FILE, &original_message) == false)
         goto check_error;
 
@@ -38,6 +41,7 @@ int main(int argc, char **argv)
 check_error:
     DEBUG_WARN("Please check \"%s\" file for error message\n", OUTPUT_FILE);
     error_write_error_on_file(OUTPUT_FILE);
-    return -g_errno;
+
+    return g_errno;
 }
 

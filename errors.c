@@ -86,8 +86,16 @@ void error_write_error_on_file(const char *filename)
             snprintf(error_string, ERROR_STRING_SIZE, "Error calling fseek()\n");
             break;
 
+        case ERROR_INVALID_HEX:
+            snprintf(error_string, ERROR_STRING_SIZE, "The ASCII hex is not an hex");
+            break;
+
         default:
             snprintf(error_string, ERROR_STRING_SIZE, "Unknown error value: %d\n", g_errno);
+            break;
+
+        case ERROR_NO_ERROR:
+            /* nothing to do */
             break;
     }
 
