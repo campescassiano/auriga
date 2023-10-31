@@ -15,7 +15,12 @@ int main(int argc, char **argv)
     (void) argv;
 
     if (message_load(INPUT_FILE, &original_message) == false)
-        goto check_error;
+    {
+        DEBUG_WARN("Please check \"%s\" file for error message\n", OUTPUT_FILE);
+        error_write_error_on_file(OUTPUT_FILE);
+
+        return g_errno;
+    }
 
     message_update(&original_message, &modified_message);
     file_ops_write_output_original(OUTPUT_FILE, &original_message, FILE_OPS_APPEND);
@@ -24,12 +29,7 @@ int main(int argc, char **argv)
         file_ops_write_output_modified(OUTPUT_FILE, &modified_message, FILE_OPS_APPEND);
 
     DEBUG_INFO("Execution completed");
+
     return 0;
-
-check_error:
-    DEBUG_WARN("Please check \"%s\" file for error message\n", OUTPUT_FILE);
-    error_write_error_on_file(OUTPUT_FILE);
-
-    return g_errno;
 }
 
