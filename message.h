@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <inttypes.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define DELIMITER_INCLUSIVE         (true)  ///< Read until marker found, include marker
 #define DELIMITER_EXCLUSIVE         (false) ///< Read until marker is found, do not include marker

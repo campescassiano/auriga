@@ -1,17 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <inttypes.h>
-#include <errno.h>
-#include <string.h>
-#include <unistd.h>
-#include <stdbool.h>
-#include <netinet/in.h>
-
 #include "errors.h"
-#include "crc32.h"
 #include "message.h"
-#include "utils.h"
 #include "file_ops.h"
 #include "debug.h"
 
